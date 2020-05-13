@@ -1,17 +1,41 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const CustomReact = {
+  stateArr: [],
+  currentStateIndex: 0,
+  component: null,
+  useState(initialValue) {
+    if (this.currentStateIndex === this.stateArr.length) {
+      const statePair = {
+        value: initialValue,
+        setState(newValue) {
+          statePair.value = newValue;
+          CustomReact.currentStateIndex = 0;
+          ReactDOM.render(<CustomReact.component />, rootElement);
+        }
+      };
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+      this.stateArr.push(statePair);
+    }
+
+    const currentStatePair = this.stateArr[this.currentStateIndex];
+
+    this.currentStateIndex += 1;
+
+    return [currentStatePair.value, currentStatePair.setState];
+  },
+  render(component, rootElement) {
+    this.component = component;
+    this.rootElement = rootElement;
+
+    ReactDOM.render(<this.component />, this.rootElement);
+  }
+};
+
+const rootElement = document.getElementById("root");
+
+CustomReact.render(App, rootElement);
+
+export { CustomReact };

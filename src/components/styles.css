@@ -1,0 +1,17 @@
+* {
+    font-size: 16px;
+}
+
+.field {
+    display: flex;
+    width: 350px;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
